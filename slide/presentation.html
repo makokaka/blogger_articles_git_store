@@ -28,14 +28,14 @@
     <title>Pig 简介</title>
     <!-- Styles -->
     
-    <link rel="stylesheet" media="print" href="file:///usr/local/lib/python2.6/dist-packages/landslide/themes/default/css/print.css">
-    <link rel="stylesheet" media="screen, projection" href="file:///usr/local/lib/python2.6/dist-packages/landslide/themes/default/css/screen.css">
+    <link rel="stylesheet" media="print" href="theme/css/print.css">
+    <link rel="stylesheet" media="screen, projection" href="theme/css/screen.css">
     
     
     <!-- /Styles -->
     <!-- Javascripts -->
     
-    <script type="text/javascript" src="file:///usr/local/lib/python2.6/dist-packages/landslide/themes/default/js/slides.js"></script>
+    <script type="text/javascript" src="theme/js/slides.js"></script>
     
     
     <!-- /Javascripts -->
@@ -70,7 +70,7 @@
             </aside>
             
             <aside class="page_number">
-              1/3
+              1/25
             </aside>
           </footer>
         </div>
@@ -105,7 +105,7 @@
             </aside>
             
             <aside class="page_number">
-              2/3
+              2/25
             </aside>
           </footer>
         </div>
@@ -117,6 +117,856 @@
           <div class="inner">
             
             <header><h1>MapReduce Workflow</h1></header>
+            
+            
+            <section><ul>
+<li>
+<p>Challenge: how many page view per user, given user session logs?</p>
+</li>
+<li>
+<p>Input: key=row, value=user session log</p>
+</li>
+<li>
+<p>Map: output key=JCN_SESS_ID, value=1</p>
+</li>
+<li>
+<p>Shuffle: sort by JCN_SESS_ID</p>
+</li>
+<li>
+<p>Reduce: for each JCN_SESS_ID, sum</p>
+</li>
+<li>
+<p>Output: JCN_SESS_ID, page view count</p>
+</li>
+</ul></section>
+            
+          </div>
+          <div class="presenter_notes">
+            <header><h1>Presenter Notes</h1></header>
+            <section>
+            
+            </section>
+          </div>
+          <footer>
+            
+            <aside class="source">
+              Source: <a href="test.md">test.md</a>
+            </aside>
+            
+            <aside class="page_number">
+              3/25
+            </aside>
+          </footer>
+        </div>
+      </div>
+      
+      <!-- slide source: test.md -->
+      <div class="slide-wrapper">
+        <div class="slide">
+          <div class="inner">
+            
+            
+            <section><p><img alt="MapReduceFlow" src="./mrwf.png" /></p></section>
+            
+          </div>
+          <div class="presenter_notes">
+            <header><h1>Presenter Notes</h1></header>
+            <section>
+            
+            </section>
+          </div>
+          <footer>
+            
+            <aside class="source">
+              Source: <a href="test.md">test.md</a>
+            </aside>
+            
+            <aside class="page_number">
+              4/25
+            </aside>
+          </footer>
+        </div>
+      </div>
+      
+      <!-- slide source: test.md -->
+      <div class="slide-wrapper">
+        <div class="slide">
+          <div class="inner">
+            
+            <header><h1>What is Pig?</h1></header>
+            
+            
+            <section><ul>
+<li>A Translator. Translate high-level language program to low-level map-reduce programs;</li>
+<li>A Platform.   Infrastructure for evalating programs;</li>
+<li>A Language.   Pig Latin;</li>
+</ul></section>
+            
+          </div>
+          <div class="presenter_notes">
+            <header><h1>Presenter Notes</h1></header>
+            <section>
+            
+            </section>
+          </div>
+          <footer>
+            
+            <aside class="source">
+              Source: <a href="test.md">test.md</a>
+            </aside>
+            
+            <aside class="page_number">
+              5/25
+            </aside>
+          </footer>
+        </div>
+      </div>
+      
+      <!-- slide source: test.md -->
+      <div class="slide-wrapper">
+        <div class="slide has_code">
+          <div class="inner">
+            
+            <header><h1>Pig Latin Tutorial</h1></header>
+            
+            
+            <section><p>A Simple Example</p>
+<div class="highlight"><pre><span class="lineno">1</span> <span class="n">A</span> <span class="o">=</span> <span class="k">load</span> <span class="s1">&#39;passwd&#39;</span> <span class="k">using</span> <span class="nf">PigStorage</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">);</span>  <span class="c1">-- load the passwd file </span>
+<span class="lineno">2</span> <span class="n">B</span> <span class="o">=</span> <span class="n">foreach</span> <span class="n">A</span> <span class="n">generate</span> <span class="err">$</span><span class="mi">0</span> <span class="k">as</span> <span class="n">id</span><span class="p">;</span>  <span class="c1">-- extract the user IDs </span>
+<span class="lineno">3</span> <span class="n">store</span> <span class="n">B</span> <span class="k">into</span> <span class="err">‘</span><span class="n">id</span><span class="p">.</span><span class="k">out</span><span class="err">’</span><span class="p">;</span>  <span class="c1">-- write the results to a file name id.out</span>
+</pre></div>
+
+<p>How to find the top 100 most visited sites by users aged 18 to 25??</p>
+<div class="highlight"><pre><span class="lineno">1</span> <span class="n">Users</span> <span class="o">=</span> <span class="k">LOAD</span> <span class="err">‘</span><span class="n">users</span><span class="err">’</span> <span class="k">AS</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">age</span><span class="p">);</span>
+<span class="lineno">2</span> <span class="n">Fltrd</span> <span class="o">=</span> <span class="n">FILTER</span> <span class="n">Users</span> <span class="k">by</span> <span class="n">age</span> <span class="o">&gt;=</span> <span class="mi">18</span> <span class="k">and</span> <span class="n">age</span> <span class="o">&lt;=</span> <span class="mi">25</span><span class="p">;</span> 
+<span class="lineno">3</span> <span class="n">Pages</span> <span class="o">=</span> <span class="k">LOAD</span> <span class="err">‘</span><span class="n">pages</span><span class="err">’</span> <span class="k">AS</span> <span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">url</span><span class="p">);</span>
+<span class="lineno">4</span> <span class="n">Jnd</span> <span class="o">=</span> <span class="k">JOIN</span> <span class="n">Fltrd</span> <span class="k">BY</span> <span class="n">name</span><span class="p">,</span> <span class="n">Pages</span> <span class="k">BY</span> <span class="n">user</span><span class="p">;</span>
+<span class="lineno">5</span> <span class="n">Grpd</span> <span class="o">=</span> <span class="k">GROUP</span> <span class="n">Jnd</span> <span class="k">by</span> <span class="n">url</span><span class="p">;</span>
+<span class="lineno">6</span> <span class="n">Smmd</span> <span class="o">=</span> <span class="n">FOREACH</span> <span class="n">Grpd</span> <span class="n">GENERATE</span> <span class="k">group</span><span class="p">,</span> <span class="nf">COUNT</span><span class="p">(</span><span class="n">Jnd</span><span class="p">)</span> <span class="k">AS</span> <span class="n">clicks</span><span class="p">;</span>
+<span class="lineno">7</span> <span class="n">Srtd</span> <span class="o">=</span> <span class="k">ORDER</span> <span class="n">Smmd</span> <span class="k">BY</span> <span class="n">clicks</span><span class="p">;</span>
+<span class="lineno">8</span> <span class="n">Top100</span> <span class="o">=</span> <span class="k">LIMIT</span> <span class="n">Srtd</span> <span class="mi">100</span><span class="p">;</span>
+<span class="lineno">9</span> <span class="n">STORE</span> <span class="n">Top100</span> <span class="k">INTO</span> <span class="err">‘</span><span class="n">top100sites</span><span class="err">’</span><span class="p">;</span>
+</pre></div>
+</section>
+            
+          </div>
+          <div class="presenter_notes">
+            <header><h1>Presenter Notes</h1></header>
+            <section>
+            
+            </section>
+          </div>
+          <footer>
+            
+            <aside class="source">
+              Source: <a href="test.md">test.md</a>
+            </aside>
+            
+            <aside class="page_number">
+              6/25
+            </aside>
+          </footer>
+        </div>
+      </div>
+      
+      <!-- slide source: test.md -->
+      <div class="slide-wrapper">
+        <div class="slide">
+          <div class="inner">
+            
+            <header><h1>Native Hadoop M/R Program</h1></header>
+            
+            
+            <section><p><img alt="MRPROGRAM" src="./complex_mrprogram.png" /></p></section>
+            
+          </div>
+          <div class="presenter_notes">
+            <header><h1>Presenter Notes</h1></header>
+            <section>
+            
+            </section>
+          </div>
+          <footer>
+            
+            <aside class="source">
+              Source: <a href="test.md">test.md</a>
+            </aside>
+            
+            <aside class="page_number">
+              7/25
+            </aside>
+          </footer>
+        </div>
+      </div>
+      
+      <!-- slide source: test.md -->
+      <div class="slide-wrapper">
+        <div class="slide">
+          <div class="inner">
+            
+            <header><h1>Pig Latin Data Types</h1></header>
+            
+            
+            <section><ul>
+<li>int, long, float, double, chararray(string), bytearray</li>
+<li>tuple (alice, bob)</li>
+<li>bag   {(alice, bob), (alice, tom)}</li>
+<li>map   ['likes'#'lakers', 'age'#22]</li>
+</ul></section>
+            
+          </div>
+          <div class="presenter_notes">
+            <header><h1>Presenter Notes</h1></header>
+            <section>
+            
+            </section>
+          </div>
+          <footer>
+            
+            <aside class="source">
+              Source: <a href="test.md">test.md</a>
+            </aside>
+            
+            <aside class="page_number">
+              8/25
+            </aside>
+          </footer>
+        </div>
+      </div>
+      
+      <!-- slide source: test.md -->
+      <div class="slide-wrapper">
+        <div class="slide">
+          <div class="inner">
+            
+            <header><h1>Expressions</h1></header>
+            
+            
+            <section><p>a -&gt; (f1:int, f2:bag{t:tuple(n1:int, n2:int)}, f3:map[])</p>
+<p>(1, {(2,3), (4,6)}, ['yahoo'#'mail'])</p>
+<p>f1 or $0 = 1</p>
+<p>f2 or $1 = {(2,3), (4,6)}</p>
+<p>f2.$0 = {(2), (4)}</p>
+<p>f3 or $2 = ['yahoo'#'mail']</p>
+<p>f3#'yahoo' = 'mail'</p>
+<p>SUM(f2.$1) = 9 (3+6)</p>
+<p>COUNT($2) = 2L</p>
+<ul>
+<li>==, !=, &gt;, &gt;=, &lt;, &lt;=</li>
+<li>matches</li>
+<li>AND OR NOT</li>
+<li>(Condition ? exp1: exp2)</li>
+</ul></section>
+            
+          </div>
+          <div class="presenter_notes">
+            <header><h1>Presenter Notes</h1></header>
+            <section>
+            
+            </section>
+          </div>
+          <footer>
+            
+            <aside class="source">
+              Source: <a href="test.md">test.md</a>
+            </aside>
+            
+            <aside class="page_number">
+              9/25
+            </aside>
+          </footer>
+        </div>
+      </div>
+      
+      <!-- slide source: test.md -->
+      <div class="slide-wrapper">
+        <div class="slide">
+          <div class="inner">
+            
+            <header><h1>Operators</h1></header>
+            
+            
+            <section><ul>
+<li>foreach</li>
+<li>distinct, filter, group</li>
+<li>join (inner, outer)</li>
+<li>order by</li>
+<li>etc.</li>
+</ul></section>
+            
+          </div>
+          <div class="presenter_notes">
+            <header><h1>Presenter Notes</h1></header>
+            <section>
+            
+            </section>
+          </div>
+          <footer>
+            
+            <aside class="source">
+              Source: <a href="test.md">test.md</a>
+            </aside>
+            
+            <aside class="page_number">
+              10/25
+            </aside>
+          </footer>
+        </div>
+      </div>
+      
+      <!-- slide source: test.md -->
+      <div class="slide-wrapper">
+        <div class="slide">
+          <div class="inner">
+            
+            <header><h1>Built In Functions</h1></header>
+            
+            
+            <section><ul>
+<li>avg, count, max, min, size, sum</li>
+<li>isempty</li>
+<li>concat, tokenize</li>
+<li>abs, cos, sin, etc.</li>
+<li>indexof, substring, trim, etc.</li>
+</ul></section>
+            
+          </div>
+          <div class="presenter_notes">
+            <header><h1>Presenter Notes</h1></header>
+            <section>
+            
+            </section>
+          </div>
+          <footer>
+            
+            <aside class="source">
+              Source: <a href="test.md">test.md</a>
+            </aside>
+            
+            <aside class="page_number">
+              11/25
+            </aside>
+          </footer>
+        </div>
+      </div>
+      
+      <!-- slide source: test.md -->
+      <div class="slide-wrapper">
+        <div class="slide">
+          <div class="inner">
+            
+            <header><h1>Examples</h1></header>
+            
+            
+            <section><ul>
+<li>
+<p>Region User Stat</p>
+<p>Given Jcn Session Logs,</p>
+<p><a href="http://bi.jcndev.com/cubey/sql_query/guang_region_user_stat.html">http://bi.jcndev.com/cubey/sql_query/guang_region_user_stat.html</a></p>
+</li>
+</ul></section>
+            
+          </div>
+          <div class="presenter_notes">
+            <header><h1>Presenter Notes</h1></header>
+            <section>
+            
+            </section>
+          </div>
+          <footer>
+            
+            <aside class="source">
+              Source: <a href="test.md">test.md</a>
+            </aside>
+            
+            <aside class="page_number">
+              12/25
+            </aside>
+          </footer>
+        </div>
+      </div>
+      
+      <!-- slide source: test.md -->
+      <div class="slide-wrapper">
+        <div class="slide has_code">
+          <div class="inner">
+            
+            <header><h1>Data</h1></header>
+            
+            
+            <section><div class="highlight"><pre><span class="lineno">1</span> <span class="p">{</span><span class="s">&quot;uid&quot;</span><span class="p">:</span><span class="s">&quot;-&quot;</span><span class="p">,</span><span class="s">&quot;endtime&quot;</span><span class="p">:</span><span class="s">&quot;2013-01-29 22:05:36&quot;</span><span class="p">,</span><span class="s">&quot;ref&quot;</span><span class="p">:</span><span class="s">&quot;http://tf.360.cn/e/wb?_=76b6fa2e03fe712e&amp;mid=&quot;</span><span class="p">,</span><span class="s">&quot;uids&quot;</span><span class="p">:</span><span class="s">&quot;-&quot;</span><span class="p">,</span><span class="s">&quot;starttime&quot;</span><span class="p">:</span><span class="s">&quot;2013-01-29 22:05:36&quot;</span><span class="p">,</span><span class="s">&quot;paths&quot;</span><span class="p">:[{</span><span class="s">&quot;status_code&quot;</span><span class="p">:</span><span class="s">&quot;200&quot;</span><span class="p">,</span><span class="s">&quot;cookie&quot;</span><span class="p">:</span><span class="s">&quot;</span>
+<span class="lineno">2</span> <span class="n">bgt</span><span class="o">=</span><span class="mi">20130112150311</span><span class="p">;</span> <span class="n">JCN_SESS_ID</span><span class="o">=</span><span class="n">e720d7f6</span><span class="o">-</span><span class="n">b6d5</span><span class="o">-</span><span class="mi">4618</span><span class="o">-</span><span class="n">b082</span><span class="o">-</span><span class="n">f9d6148705f9</span><span class="p">;</span> <span class="n">JID</span><span class="o">=</span><span class="mo">02</span><span class="n">Qc9FDxCq</span><span class="o">+</span><span class="n">YPRScBnysAg</span><span class="o">==</span><span class="p">;</span> <span class="n">__utma</span><span class="o">=</span><span class="mf">34408359.1336847777</span><span class="o">.</span><span class="mf">1357974199.1357974199</span><span class="o">.</span><span class="mf">1357974199.1</span><span class="p">;</span> <span class="n">__utmz</span><span class="o">=</span><span class="mf">34408359.1357974199</span><span class="o">.</span>
+<span class="lineno">3</span>     <span class="mf">1.1</span><span class="o">.</span><span class="n">utmcsr</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="mf">360.</span><span class="n">cn</span><span class="o">|</span><span class="n">utmccn</span><span class="o">=</span><span class="p">(</span><span class="n">referral</span><span class="p">)</span><span class="o">|</span><span class="n">utmcmd</span><span class="o">=</span><span class="n">referral</span><span class="o">|</span><span class="n">utmcct</span><span class="o">=/</span><span class="n">e</span><span class="o">/</span><span class="n">wb</span><span class="s">&quot;,&quot;</span><span class="n">ref</span><span class="s">&quot;:&quot;</span><span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">tf</span><span class="o">.</span><span class="mf">360.</span><span class="n">cn</span><span class="o">/</span><span class="n">e</span><span class="o">/</span><span class="n">wb</span><span class="err">?</span><span class="n">_</span><span class="o">=</span><span class="mi">76</span><span class="n">b6fa2e03fe712e</span><span class="o">&amp;</span><span class="n">mid</span><span class="o">=</span><span class="s">&quot;,&quot;</span><span class="n">time</span><span class="s">&quot;:&quot;</span><span class="mi">2013</span><span class="o">-</span><span class="mo">01</span><span class="o">-</span><span class="mi">29</span> <span class="mi">22</span><span class="p">:</span><span class="mo">05</span><span class="p">:</span><span class="mi">36</span><span class="s">&quot;,&quot;</span><span class="n">url</span><span class="s">&quot;:&quot;</span><span class="o">/</span><span class="n">pickxks</span><span class="err">?</span><span class="n">from</span><span class="o">=</span><span class="n">ad_2pick1_dj004</span><span class="s">&quot;}</span>
+<span class="lineno">4</span> <span class="p">],</span><span class="s">&quot;browser&quot;</span><span class="p">:</span><span class="s">&quot;Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/21.0.1180.89 Safari/537.1&quot;</span><span class="p">,</span><span class="s">&quot;ssid&quot;</span><span class="p">:</span><span class="s">&quot;e720d7f6-b6d5-4618-b082-f9d6148705f9&quot;</span><span class="p">,</span><span class="s">&quot;size&quot;</span><span class="p">:</span><span class="s">&quot;1&quot;</span><span class="p">,</span><span class="s">&quot;ip&quot;</span><span class="p">:</span><span class="s">&quot;121.12.16.249</span>
+<span class="lineno">5</span>     <span class="s">&quot;}</span>
+</pre></div>
+</section>
+            
+          </div>
+          <div class="presenter_notes">
+            <header><h1>Presenter Notes</h1></header>
+            <section>
+            
+            </section>
+          </div>
+          <footer>
+            
+            <aside class="source">
+              Source: <a href="test.md">test.md</a>
+            </aside>
+            
+            <aside class="page_number">
+              13/25
+            </aside>
+          </footer>
+        </div>
+      </div>
+      
+      <!-- slide source: test.md -->
+      <div class="slide-wrapper">
+        <div class="slide has_code">
+          <div class="inner">
+            
+            <header><h1>Pig Loader</h1></header>
+            
+            
+            <section><p>JsonLoader</p>
+<p>Self-Contain JsonLoader need specify schemes!</p>
+<p>We Use elephant-bird which comes from twitter.</p>
+<div class="highlight"><pre><span class="lineno">1</span> <span class="n">register</span> <span class="s1">&#39;elephant-bird-core.jar&#39;</span><span class="p">;</span>
+<span class="lineno">2</span> <span class="n">register</span> <span class="s1">&#39;elephant-bird-pig.jar&#39;</span><span class="p">;</span>
+<span class="lineno">3</span> <span class="n">register</span> <span class="s1">&#39;json-simple-1.1.jar&#39;</span><span class="p">;</span>
+<span class="lineno">4</span> 
+<span class="lineno">5</span> <span class="n">a</span> <span class="o">=</span> <span class="k">load</span> <span class="s1">&#39;$INPUT&#39;</span> <span class="k">using</span> <span class="n">com</span><span class="p">.</span><span class="n">twitter</span><span class="p">.</span><span class="n">elephantbird</span><span class="p">.</span><span class="n">pig</span><span class="p">.</span><span class="k">load</span><span class="p">.</span><span class="nf">JsonLoader</span><span class="p">(</span><span class="s1">&#39;-nestedLoad&#39;</span><span class="p">);</span>
+</pre></div>
+</section>
+            
+          </div>
+          <div class="presenter_notes">
+            <header><h1>Presenter Notes</h1></header>
+            <section>
+            
+            </section>
+          </div>
+          <footer>
+            
+            <aside class="source">
+              Source: <a href="test.md">test.md</a>
+            </aside>
+            
+            <aside class="page_number">
+              14/25
+            </aside>
+          </footer>
+        </div>
+      </div>
+      
+      <!-- slide source: test.md -->
+      <div class="slide-wrapper">
+        <div class="slide has_code">
+          <div class="inner">
+            
+            <header><h1>Internal Data Structure</h1></header>
+            
+            
+            <section><p>Bag : List of Tuple, {(a, b, c), (1, 2, 3)}</p>
+<p>Our : {([status_code#"200",time#"2013-01-29 22:05:36",url#"/pickxks?from=ad_2pick1_dj004"])}</p>
+<p>tuple has only one item : a map, inconvenient for process</p>
+<p>UDF : User Define Function</p>
+<div class="highlight"><pre><span class="lineno"> 1</span> <span class="kd">public</span> <span class="kd">class</span> <span class="nc">SessMapBagToTupleBag</span> <span class="kd">extends</span> <span class="n">EvalFunc</span><span class="o">&lt;</span><span class="n">DataBag</span><span class="o">&gt;</span> <span class="o">{</span>
+<span class="lineno"> 2</span> <span class="n">String</span><span class="o">[]</span> <span class="n">keys</span><span class="o">;</span>
+<span class="lineno"> 3</span> <span class="kd">public</span> <span class="nf">SessMapBagToTupleBag</span><span class="o">(</span><span class="n">String</span> <span class="n">keylist</span><span class="o">)</span> <span class="o">{</span>
+<span class="lineno"> 4</span>     <span class="n">keys</span> <span class="o">=</span> <span class="n">keylist</span><span class="o">.</span><span class="na">split</span><span class="o">(</span><span class="s">&quot;,&quot;</span><span class="o">);</span>
+<span class="lineno"> 5</span> <span class="o">}</span>
+<span class="lineno"> 6</span> <span class="nd">@Override</span>
+<span class="lineno"> 7</span> <span class="kd">public</span> <span class="n">DataBag</span> <span class="nf">exec</span><span class="o">(</span><span class="n">Tuple</span> <span class="n">input</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
+<span class="lineno"> 8</span>     <span class="k">try</span> <span class="o">{</span>
+<span class="lineno"> 9</span>         <span class="n">DataBag</span> <span class="n">bag</span> <span class="o">=</span> <span class="n">BagFactory</span><span class="o">.</span><span class="na">getInstance</span><span class="o">().</span><span class="na">newDefaultBag</span><span class="o">();</span>
+<span class="lineno">10</span>         <span class="n">DataBag</span> <span class="n">oldbag</span> <span class="o">=</span> <span class="o">(</span><span class="n">DataBag</span><span class="o">)</span><span class="n">input</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
+<span class="lineno">11</span>         <span class="n">Iterator</span> <span class="n">it</span> <span class="o">=</span> <span class="n">oldbag</span><span class="o">.</span><span class="na">iterator</span><span class="o">();</span>
+<span class="lineno">12</span> 
+<span class="lineno">13</span>         <span class="k">while</span> <span class="o">(</span><span class="n">it</span><span class="o">.</span><span class="na">hasNext</span><span class="o">())</span> <span class="o">{</span>
+<span class="lineno">14</span>             <span class="n">List</span><span class="o">&lt;</span><span class="n">Object</span><span class="o">&gt;</span> <span class="n">items</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">Object</span><span class="o">&gt;();</span>
+<span class="lineno">15</span>             <span class="n">Tuple</span> <span class="n">t</span> <span class="o">=</span> <span class="o">(</span><span class="n">Tuple</span><span class="o">)</span><span class="n">it</span><span class="o">.</span><span class="na">next</span><span class="o">();</span>
+<span class="lineno">16</span>             <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;</span> <span class="n">m</span> <span class="o">=</span> <span class="o">(</span><span class="n">Map</span><span class="o">)</span><span class="n">t</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
+<span class="lineno">17</span>             <span class="k">for</span> <span class="o">(</span><span class="n">String</span> <span class="n">key</span> <span class="o">:</span> <span class="n">keys</span><span class="o">)</span> <span class="o">{</span>
+<span class="lineno">18</span>                 <span class="n">items</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">m</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">key</span><span class="o">));</span>
+<span class="lineno">19</span>             <span class="o">}</span>
+<span class="lineno">20</span>             <span class="n">Tuple</span> <span class="n">t2</span> <span class="o">=</span> <span class="n">TupleFactory</span><span class="o">.</span><span class="na">getInstance</span><span class="o">().</span><span class="na">newTuple</span><span class="o">(</span><span class="n">items</span><span class="o">);</span>
+<span class="lineno">21</span>             <span class="n">bag</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">t2</span><span class="o">);</span>
+<span class="lineno">22</span>         <span class="o">}</span>
+<span class="lineno">23</span>         <span class="k">return</span> <span class="n">bag</span><span class="o">;</span>
+<span class="lineno">24</span>     <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">ee</span><span class="o">)</span> <span class="o">{</span>
+<span class="lineno">25</span>         <span class="k">throw</span> <span class="k">new</span> <span class="nf">RuntimeException</span><span class="o">(</span><span class="s">&quot;Error while SessMapBagToTupleBag&quot;</span><span class="o">,</span> <span class="n">ee</span><span class="o">);</span>
+<span class="lineno">26</span>     <span class="o">}</span>
+<span class="lineno">27</span> <span class="o">}</span>
+<span class="lineno">28</span> <span class="o">}</span>
+</pre></div>
+</section>
+            
+          </div>
+          <div class="presenter_notes">
+            <header><h1>Presenter Notes</h1></header>
+            <section>
+            
+            </section>
+          </div>
+          <footer>
+            
+            <aside class="source">
+              Source: <a href="test.md">test.md</a>
+            </aside>
+            
+            <aside class="page_number">
+              15/25
+            </aside>
+          </footer>
+        </div>
+      </div>
+      
+      <!-- slide source: test.md -->
+      <div class="slide-wrapper">
+        <div class="slide has_code">
+          <div class="inner">
+            
+            <header><h1>Internal Data Structure (Cont.)</h1></header>
+            
+            
+            <section><p>UDF: Pig Supports Java, Python, Ruby, etc.</p>
+<div class="highlight"><pre><span class="lineno">1</span> <span class="n">register</span> <span class="s1">&#39;piggybank.jar&#39;</span><span class="p">;</span>
+<span class="lineno">2</span> <span class="n">define</span> <span class="n">GO</span> <span class="n">org</span><span class="p">.</span><span class="n">apache</span><span class="p">.</span><span class="n">pig</span><span class="p">.</span><span class="n">piggybank</span><span class="p">.</span><span class="n">evaluation</span><span class="p">.</span><span class="n">jcn</span><span class="p">.</span><span class="nf">SessMapBagToTupleBag</span><span class="p">(</span><span class="s1">&#39;status_code,cookie,time,ref,url&#39;</span><span class="p">);</span>
+<span class="lineno">3</span> 
+<span class="lineno">4</span> <span class="n">b</span> <span class="o">=</span> <span class="n">foreach</span> <span class="n">a</span> <span class="nf">generate</span> <span class="p">(</span><span class="n">chararray</span><span class="p">)</span> <span class="err">$</span><span class="mi">0</span><span class="c1">#&#39;uid&#39; as uid, $0#&#39;endtime&#39; as endtime,</span>
+<span class="lineno">5</span>   <span class="err">$</span><span class="mi">0</span><span class="c1">#&#39;starttime&#39; as starttime, $0#&#39;uids&#39; as uids, $0#&#39;ref&#39; as ref,</span>
+<span class="lineno">6</span>     <span class="err">$</span><span class="mi">0</span><span class="c1">#&#39;browser&#39; as browser, $0#&#39;ssid&#39; as ssid, $0#&#39;size&#39; as size, $0#&#39;ip&#39; as ip,</span>
+<span class="lineno">7</span>       <span class="nf">GO</span><span class="p">(</span><span class="err">$</span><span class="mi">0</span><span class="c1">#&#39;paths&#39;) as paths;</span>
+</pre></div>
+</section>
+            
+          </div>
+          <div class="presenter_notes">
+            <header><h1>Presenter Notes</h1></header>
+            <section>
+            
+            </section>
+          </div>
+          <footer>
+            
+            <aside class="source">
+              Source: <a href="test.md">test.md</a>
+            </aside>
+            
+            <aside class="page_number">
+              16/25
+            </aside>
+          </footer>
+        </div>
+      </div>
+      
+      <!-- slide source: test.md -->
+      <div class="slide-wrapper">
+        <div class="slide has_code">
+          <div class="inner">
+            
+            <header><h1>Filter</h1></header>
+            
+            
+            <section><p>Python UDF : session filter function</p>
+<div class="highlight"><pre><span class="lineno">1</span> <span class="n">register</span> <span class="s1">&#39;jcn_udf.py&#39;</span> <span class="k">using</span> <span class="n">jython</span> <span class="k">as</span> <span class="n">myudf</span><span class="p">;</span>
+<span class="lineno">2</span> <span class="n">c</span> <span class="o">=</span> <span class="n">filter</span> <span class="n">b</span> <span class="k">by</span> <span class="n">myudf</span><span class="p">.</span><span class="nf">sessFiltered</span><span class="p">(</span><span class="n">uids</span><span class="p">,</span> <span class="n">ip</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">and</span> <span class="n">starttime</span> <span class="o">&gt;=</span> <span class="s1">&#39;$DAY2&#39;</span><span class="p">;</span>
+</pre></div>
+
+<p>Python Code</p>
+<div class="highlight"><pre><span class="lineno">1</span> <span class="nd">@outputSchema</span><span class="p">(</span><span class="s">&quot;is_filterd:int&quot;</span><span class="p">)</span>
+<span class="lineno">2</span> <span class="k">def</span> <span class="nf">sessFiltered</span><span class="p">(</span><span class="n">uids</span><span class="p">,</span> <span class="n">ip</span><span class="p">):</span>
+<span class="lineno">3</span> <span class="k">for</span> <span class="n">uid</span> <span class="ow">in</span> <span class="n">uids</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">):</span>
+<span class="lineno">4</span>     <span class="k">if</span> <span class="n">SessionFilter</span><span class="o">.</span><span class="n">uid_filter</span><span class="p">(</span><span class="n">uid</span><span class="p">):</span>
+<span class="lineno">5</span>         <span class="k">return</span> <span class="mi">1</span>
+<span class="lineno">6</span> <span class="k">if</span> <span class="n">SessionFilter</span><span class="o">.</span><span class="n">ip_filter</span><span class="p">(</span><span class="n">ip</span><span class="p">):</span>
+<span class="lineno">7</span>     <span class="k">return</span> <span class="mi">1</span>
+<span class="lineno">8</span> <span class="k">return</span> <span class="mi">0</span>
+</pre></div>
+</section>
+            
+          </div>
+          <div class="presenter_notes">
+            <header><h1>Presenter Notes</h1></header>
+            <section>
+            
+            </section>
+          </div>
+          <footer>
+            
+            <aside class="source">
+              Source: <a href="test.md">test.md</a>
+            </aside>
+            
+            <aside class="page_number">
+              17/25
+            </aside>
+          </footer>
+        </div>
+      </div>
+      
+      <!-- slide source: test.md -->
+      <div class="slide-wrapper">
+        <div class="slide has_code">
+          <div class="inner">
+            
+            <header><h1>Generate Data for every session</h1></header>
+            
+            
+            <section><div class="highlight"><pre><span class="lineno">1</span> <span class="n">d</span> <span class="o">=</span> <span class="n">foreach</span> <span class="n">c</span> <span class="n">generate</span> <span class="nf">SUBSTRING</span><span class="p">(</span><span class="n">starttime</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span> <span class="k">as</span> <span class="n">day</span><span class="p">,</span>
+<span class="lineno">2</span>          <span class="n">myudf</span><span class="p">.</span><span class="nf">province</span><span class="p">(</span><span class="n">ip</span><span class="p">)</span> <span class="k">as</span> <span class="n">province</span><span class="p">,</span> <span class="mi">1</span> <span class="k">as</span> <span class="n">uv</span><span class="p">,</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">size</span> <span class="k">as</span> <span class="n">pv</span><span class="p">,</span>
+<span class="lineno">3</span>          <span class="n">myudf</span><span class="p">.</span><span class="nf">newuser</span><span class="p">(</span><span class="n">paths</span><span class="p">.</span><span class="err">$</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;$DAY&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">newuser</span><span class="p">,</span>
+<span class="lineno">4</span>          <span class="n">myudf</span><span class="p">.</span><span class="nf">urlsearch</span><span class="p">(</span><span class="n">paths</span><span class="p">.</span><span class="err">$</span><span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;/favourite/add&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fav_cnt</span><span class="p">,</span>
+<span class="lineno">5</span>          <span class="n">myudf</span><span class="p">.</span><span class="nf">urlsearch</span><span class="p">(</span><span class="n">paths</span><span class="p">.</span><span class="err">$</span><span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;/skip.htm&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">oc_cnt</span><span class="p">,</span>
+<span class="lineno">6</span>          <span class="n">myudf</span><span class="p">.</span><span class="nf">device</span><span class="p">(</span><span class="n">browser</span><span class="p">)</span> <span class="k">as</span> <span class="n">device</span><span class="p">;</span>
+</pre></div>
+
+<p>Python UDF Code:</p>
+<div class="highlight"><pre><span class="lineno"> 1</span> <span class="nd">@outputSchema</span><span class="p">(</span><span class="s">&quot;is_new:int&quot;</span><span class="p">)</span>
+<span class="lineno"> 2</span> <span class="k">def</span> <span class="nf">newuser</span><span class="p">(</span><span class="n">cookies</span><span class="p">,</span> <span class="n">day</span><span class="p">):</span>
+<span class="lineno"> 3</span>     <span class="n">cookies</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">cookies</span><span class="p">)</span>
+<span class="lineno"> 4</span>     <span class="k">if</span> <span class="ow">not</span> <span class="n">cookies</span><span class="p">:</span>
+<span class="lineno"> 5</span>         <span class="k">return</span> <span class="mi">0</span>
+<span class="lineno"> 6</span>     <span class="n">cookie</span> <span class="o">=</span> <span class="n">cookies</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+<span class="lineno"> 7</span>     <span class="n">m</span> <span class="o">=</span> <span class="n">parseCookie2Dict</span><span class="p">(</span><span class="n">cookie</span><span class="p">)</span>
+<span class="lineno"> 8</span>     <span class="n">bgt</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;bgt&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
+<span class="lineno"> 9</span>     <span class="k">if</span> <span class="n">bgt</span> <span class="ow">and</span> <span class="n">bgt</span> <span class="o">&gt;=</span> <span class="n">day</span><span class="p">:</span>
+<span class="lineno">10</span>         <span class="k">return</span> <span class="mi">1</span>
+<span class="lineno">11</span>     <span class="k">return</span> <span class="mi">0</span>
+</pre></div>
+</section>
+            
+          </div>
+          <div class="presenter_notes">
+            <header><h1>Presenter Notes</h1></header>
+            <section>
+            
+            </section>
+          </div>
+          <footer>
+            
+            <aside class="source">
+              Source: <a href="test.md">test.md</a>
+            </aside>
+            
+            <aside class="page_number">
+              18/25
+            </aside>
+          </footer>
+        </div>
+      </div>
+      
+      <!-- slide source: test.md -->
+      <div class="slide-wrapper">
+        <div class="slide has_code">
+          <div class="inner">
+            
+            <header><h1>Generate Data for db table</h1></header>
+            
+            
+            <section><div class="highlight"><pre><span class="lineno">1</span> <span class="n">e</span> <span class="o">=</span> <span class="n">foreach</span> <span class="n">d</span> <span class="n">generate</span> <span class="n">day</span><span class="p">,</span> <span class="n">province</span><span class="p">,</span> <span class="n">uv</span><span class="p">,</span> <span class="n">pv</span><span class="p">,</span>
+<span class="lineno">2</span>   <span class="p">(</span><span class="n">newuser</span> <span class="o">==</span> <span class="mi">1</span> <span class="o">?</span> <span class="mi">1</span> <span class="p">:</span> <span class="mi">0</span><span class="p">)</span> <span class="k">as</span> <span class="n">is_new_user</span><span class="p">,</span>
+<span class="lineno">3</span>   <span class="p">(</span><span class="n">newuser</span> <span class="o">==</span> <span class="mi">1</span> <span class="o">?</span> <span class="mi">0</span> <span class="p">:</span> <span class="mi">1</span><span class="p">)</span> <span class="k">as</span> <span class="n">is_old_user</span><span class="p">,</span>
+<span class="lineno">4</span>   <span class="p">(</span><span class="n">fav_cnt</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">?</span> <span class="mi">1</span> <span class="p">:</span> <span class="mi">0</span><span class="p">)</span> <span class="k">as</span> <span class="n">has_fav</span><span class="p">,</span> <span class="n">fav_cnt</span><span class="p">,</span>
+<span class="lineno">5</span>   <span class="p">(</span><span class="n">oc_cnt</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">?</span> <span class="mi">1</span> <span class="p">:</span> <span class="mi">0</span><span class="p">)</span> <span class="k">as</span> <span class="n">has_oc</span><span class="p">,</span> <span class="n">oc_cnt</span><span class="p">,</span>
+<span class="lineno">6</span>   <span class="p">(</span><span class="n">device</span> <span class="o">==</span> <span class="s1">&#39;0&#39;</span> <span class="o">?</span> <span class="mi">1</span> <span class="p">:</span> <span class="mi">0</span><span class="p">)</span> <span class="k">as</span> <span class="n">pc</span><span class="p">,</span>
+<span class="lineno">7</span>   <span class="p">(</span><span class="n">device</span> <span class="o">==</span> <span class="s1">&#39;0&#39;</span> <span class="o">?</span> <span class="mi">0</span> <span class="p">:</span> <span class="mi">1</span><span class="p">)</span> <span class="k">as</span> <span class="n">mobile</span><span class="p">;</span>
+</pre></div>
+</section>
+            
+          </div>
+          <div class="presenter_notes">
+            <header><h1>Presenter Notes</h1></header>
+            <section>
+            
+            </section>
+          </div>
+          <footer>
+            
+            <aside class="source">
+              Source: <a href="test.md">test.md</a>
+            </aside>
+            
+            <aside class="page_number">
+              19/25
+            </aside>
+          </footer>
+        </div>
+      </div>
+      
+      <!-- slide source: test.md -->
+      <div class="slide-wrapper">
+        <div class="slide has_code">
+          <div class="inner">
+            
+            <header><h1>Group by province</h1></header>
+            
+            
+            <section><div class="highlight"><pre><span class="lineno">1</span> <span class="n">f</span> <span class="o">=</span> <span class="k">group</span> <span class="n">e</span> <span class="k">by</span> <span class="p">(</span><span class="n">day</span><span class="p">,</span> <span class="n">province</span><span class="p">);</span>
+<span class="lineno">2</span> <span class="n">g</span> <span class="o">=</span> <span class="n">foreach</span> <span class="n">f</span> <span class="n">generate</span> <span class="nf">CONCAT</span><span class="p">(</span><span class="k">group</span><span class="p">.</span><span class="n">day</span><span class="p">,</span> <span class="s1">&#39; 00:00:00&#39;</span><span class="p">),</span> <span class="k">group</span><span class="p">.</span><span class="n">province</span><span class="p">,</span> <span class="nf">SUM</span><span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">uv</span><span class="p">),</span> <span class="nf">SUM</span><span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">pv</span><span class="p">),</span>
+<span class="lineno">3</span>   <span class="nf">SUM</span><span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">is_new_user</span><span class="p">),</span> <span class="nf">SUM</span><span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">is_old_user</span><span class="p">),</span> <span class="nf">SUM</span><span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">has_fav</span><span class="p">),</span> <span class="nf">SUM</span><span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">fav_cnt</span><span class="p">),</span>
+<span class="lineno">4</span>   <span class="nf">SUM</span><span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">has_oc</span><span class="p">),</span> <span class="nf">SUM</span><span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">oc_cnt</span><span class="p">),</span> <span class="nf">SUM</span><span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">pc</span><span class="p">),</span> <span class="nf">SUM</span><span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">mobile</span><span class="p">);</span>
+<span class="lineno">5</span> <span class="n">store</span> <span class="n">g</span> <span class="k">into</span> <span class="s1">&#39;$HADOOP_OUTPUT&#39;</span><span class="p">;</span>
+</pre></div>
+</section>
+            
+          </div>
+          <div class="presenter_notes">
+            <header><h1>Presenter Notes</h1></header>
+            <section>
+            
+            </section>
+          </div>
+          <footer>
+            
+            <aside class="source">
+              Source: <a href="test.md">test.md</a>
+            </aside>
+            
+            <aside class="page_number">
+              20/25
+            </aside>
+          </footer>
+        </div>
+      </div>
+      
+      <!-- slide source: test.md -->
+      <div class="slide-wrapper">
+        <div class="slide has_code">
+          <div class="inner">
+            
+            <header><h1>pig run</h1></header>
+            
+            
+            <section><div class="highlight"><pre><span class="lineno">1</span> pig -Dmapred.cache.files<span class="o">=</span>hdfs://sdl-job1/user/maoxing.xu/pig/special_uids#uid_fromdb.txt,hdfs://sdl-job1/user/maoxing.xu/pig/ipblk_rgn_code.txt#ipblk_rgn_code.txt,hdfs://sdl-job1/user/maoxing.xu/pig/geo_code_labels.txt#geo_code_labels.txt <span class="se">\</span>
+<span class="lineno">2</span> -Dmapred.create.symlink<span class="o">=</span>yes <span class="se">\</span>
+<span class="lineno">3</span> -param <span class="nv">INPUT</span><span class="o">=</span>/logs/guang/nginxlog_sess/<span class="nv">$day_hdp</span>/allday <span class="se">\</span>
+<span class="lineno">4</span> -param <span class="nv">DAY</span><span class="o">=</span><span class="nv">$day_py</span> <span class="se">\</span>
+<span class="lineno">5</span> -param <span class="nv">DAY2</span><span class="o">=</span><span class="nv">$day_hdp</span> <span class="se">\</span>
+<span class="lineno">6</span> -param <span class="nv">HADOOP_OUTPUT</span><span class="o">=</span><span class="nv">$hdp_path</span> <span class="se">\</span>
+<span class="lineno">7</span> ./jcnsess_load.pig
+</pre></div>
+</section>
+            
+          </div>
+          <div class="presenter_notes">
+            <header><h1>Presenter Notes</h1></header>
+            <section>
+            
+            </section>
+          </div>
+          <footer>
+            
+            <aside class="source">
+              Source: <a href="test.md">test.md</a>
+            </aside>
+            
+            <aside class="page_number">
+              21/25
+            </aside>
+          </footer>
+        </div>
+      </div>
+      
+      <!-- slide source: test.md -->
+      <div class="slide-wrapper">
+        <div class="slide has_code">
+          <div class="inner">
+            
+            <header><h1>export data from hadoop to mysql</h1></header>
+            
+            
+            <section><div class="highlight"><pre><span class="lineno">1</span> sqoop-export --connect jdbc:mysql://192.168.10.71/guangbi --username guangbi --password guangbi --table region_user_stat --export-dir <span class="nv">$hdp_path</span> --input-fields-terminated-by <span class="s1">&#39;\t&#39;</span>
+</pre></div>
+</section>
+            
+          </div>
+          <div class="presenter_notes">
+            <header><h1>Presenter Notes</h1></header>
+            <section>
+            
+            </section>
+          </div>
+          <footer>
+            
+            <aside class="source">
+              Source: <a href="test.md">test.md</a>
+            </aside>
+            
+            <aside class="page_number">
+              22/25
+            </aside>
+          </footer>
+        </div>
+      </div>
+      
+      <!-- slide source: test.md -->
+      <div class="slide-wrapper">
+        <div class="slide">
+          <div class="inner">
+            
+            <header><h1>How many Code?</h1></header>
+            
+            
+            <section><p>shell script + pig script + python udf script = 125 lines</p></section>
+            
+          </div>
+          <div class="presenter_notes">
+            <header><h1>Presenter Notes</h1></header>
+            <section>
+            
+            </section>
+          </div>
+          <footer>
+            
+            <aside class="source">
+              Source: <a href="test.md">test.md</a>
+            </aside>
+            
+            <aside class="page_number">
+              23/25
+            </aside>
+          </footer>
+        </div>
+      </div>
+      
+      <!-- slide source: test.md -->
+      <div class="slide-wrapper">
+        <div class="slide">
+          <div class="inner">
+            
+            
+            <section><p><img alt="bk" src="http://www.0759home.com/bbs/UploadFile/2010-7/201072212241235829.jpg" /></p></section>
+            
+          </div>
+          <div class="presenter_notes">
+            <header><h1>Presenter Notes</h1></header>
+            <section>
+            
+            </section>
+          </div>
+          <footer>
+            
+            <aside class="source">
+              Source: <a href="test.md">test.md</a>
+            </aside>
+            
+            <aside class="page_number">
+              24/25
+            </aside>
+          </footer>
+        </div>
+      </div>
+      
+      <!-- slide source: test.md -->
+      <div class="slide-wrapper">
+        <div class="slide">
+          <div class="inner">
+            
+            <header><h1>Q/A</h1></header>
             
             
           </div>
@@ -133,7 +983,7 @@
             </aside>
             
             <aside class="page_number">
-              3/3
+              25/25
             </aside>
           </footer>
         </div>
@@ -162,6 +1012,138 @@
       <tr id="toc-row-3">
         <th><a href="#slide3">MapReduce Workflow</a></th>
         <td><a href="#slide3">3</a></td>
+      </tr>
+      
+      
+      <tr id="toc-row-4">
+        <th><a href="#slide4">-</a></th>
+        <td><a href="#slide4">4</a></td>
+      </tr>
+      
+      
+      <tr id="toc-row-5">
+        <th><a href="#slide5">What is Pig?</a></th>
+        <td><a href="#slide5">5</a></td>
+      </tr>
+      
+      
+      <tr id="toc-row-6">
+        <th><a href="#slide6">Pig Latin Tutorial</a></th>
+        <td><a href="#slide6">6</a></td>
+      </tr>
+      
+      
+      <tr id="toc-row-7">
+        <th><a href="#slide7">Native Hadoop M/R Program</a></th>
+        <td><a href="#slide7">7</a></td>
+      </tr>
+      
+      
+      <tr id="toc-row-8">
+        <th><a href="#slide8">Pig Latin Data Types</a></th>
+        <td><a href="#slide8">8</a></td>
+      </tr>
+      
+      
+      <tr id="toc-row-9">
+        <th><a href="#slide9">Expressions</a></th>
+        <td><a href="#slide9">9</a></td>
+      </tr>
+      
+      
+      <tr id="toc-row-10">
+        <th><a href="#slide10">Operators</a></th>
+        <td><a href="#slide10">10</a></td>
+      </tr>
+      
+      
+      <tr id="toc-row-11">
+        <th><a href="#slide11">Built In Functions</a></th>
+        <td><a href="#slide11">11</a></td>
+      </tr>
+      
+      
+      <tr id="toc-row-12">
+        <th><a href="#slide12">Examples</a></th>
+        <td><a href="#slide12">12</a></td>
+      </tr>
+      
+      
+      <tr id="toc-row-13">
+        <th><a href="#slide13">Data</a></th>
+        <td><a href="#slide13">13</a></td>
+      </tr>
+      
+      
+      <tr id="toc-row-14">
+        <th><a href="#slide14">Pig Loader</a></th>
+        <td><a href="#slide14">14</a></td>
+      </tr>
+      
+      
+      <tr id="toc-row-15">
+        <th><a href="#slide15">Internal Data Structure</a></th>
+        <td><a href="#slide15">15</a></td>
+      </tr>
+      
+      
+      <tr id="toc-row-16">
+        <th><a href="#slide16">Internal Data Structure (Cont.)</a></th>
+        <td><a href="#slide16">16</a></td>
+      </tr>
+      
+      
+      <tr id="toc-row-17">
+        <th><a href="#slide17">Filter</a></th>
+        <td><a href="#slide17">17</a></td>
+      </tr>
+      
+      
+      <tr id="toc-row-18">
+        <th><a href="#slide18">Generate Data for every session</a></th>
+        <td><a href="#slide18">18</a></td>
+      </tr>
+      
+      
+      <tr id="toc-row-19">
+        <th><a href="#slide19">Generate Data for db table</a></th>
+        <td><a href="#slide19">19</a></td>
+      </tr>
+      
+      
+      <tr id="toc-row-20">
+        <th><a href="#slide20">Group by province</a></th>
+        <td><a href="#slide20">20</a></td>
+      </tr>
+      
+      
+      <tr id="toc-row-21">
+        <th><a href="#slide21">pig run</a></th>
+        <td><a href="#slide21">21</a></td>
+      </tr>
+      
+      
+      <tr id="toc-row-22">
+        <th><a href="#slide22">export data from hadoop to mysql</a></th>
+        <td><a href="#slide22">22</a></td>
+      </tr>
+      
+      
+      <tr id="toc-row-23">
+        <th><a href="#slide23">How many Code?</a></th>
+        <td><a href="#slide23">23</a></td>
+      </tr>
+      
+      
+      <tr id="toc-row-24">
+        <th><a href="#slide24">-</a></th>
+        <td><a href="#slide24">24</a></td>
+      </tr>
+      
+      
+      <tr id="toc-row-25">
+        <th><a href="#slide25">Q/A</a></th>
+        <td><a href="#slide25">25</a></td>
       </tr>
       
       
